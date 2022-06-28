@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <title>save</title>
+</head>
+<body>
+  <h2>save</h2>
+  <form action="/member/save" method="post" name="saveForm" id="saveForm" enctype="multipart/form-data">
+      이메일 : <input type="text" name="memberEmail" placeholder="Email" id="memberEmail" onblur="dup()"> <br>
+      <span id="spanEmail"></span>
+      비밀번호 : <input type="text" name="memberPassword" placeholder="Password"> <br>
+      이름 : <input type="text" name="memberName" placeholder="Name"> <br>
+      <input type="file" name="memberFile"><br>
+  </form>
+    <button th:onclick="save()">가입</button>
+</body>
+<script>
+    let saveTest = 0;
+    function dup(){
+        const email = document.getElementById("memberEmail").value;
+        $.ajax({
+            url:"/member/dup-check",
+            type:"post",
+            data:{
+                "memberEmail":email
+            },
+            dataType:"text",
+
+            success: function (result){
+                if (result == "ok"){
+                    document.getElementById("spanEmail").style.color = "green";
+                    document.getElementById("spanEmail").innerHTML = "가능합니다" + "<br>";
+                    saveTest = 1;
+                }else{
+                    document.getElementById("spanEmail").style.color = "red";
+                    document.getElementById("spanEmail").innerHTML = "불가능합니다"  + "<br>";
+                    saveTest = 0;
+                }
+            }
+        });
+    };
+
+    function save(){
+        if (saveTest == 1){
+            alert("회원가입 완료")
+            saveForm.submit();
+        }else {
+            alert("불가능");
+        }
+    };
+</script>
+</html>

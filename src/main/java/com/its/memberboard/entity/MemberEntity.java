@@ -1,5 +1,6 @@
 package com.its.memberboard.entity;
 
+import com.its.memberboard.dto.MemberDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,7 +17,7 @@ public class MemberEntity {
     @Column(name = "member_id")
     private Long id;
 
-    @Column(name = "member_email")
+    @Column(name = "member_email" , unique = true)
     private String memberEmail;
 
     @Column(name = "member_password")
@@ -38,5 +39,14 @@ public class MemberEntity {
     @PreRemove
     private void preRemove(){
         commentEntityList.forEach(comment -> comment.setMemberEntity(null));
+    }
+
+    public static MemberEntity toSaveEntity(MemberDTO memberDTO){
+        MemberEntity memberEntity = new MemberEntity();
+        memberEntity.setMemberEmail(memberDTO.getMemberEmail());
+        memberEntity.setMemberPassword(memberDTO.getMemberPassword());
+        memberEntity.setMemberName(memberDTO.getMemberName());
+        memberEntity.setMemberProfile(memberDTO.getMemberProfile());
+        return memberEntity;
     }
 }
