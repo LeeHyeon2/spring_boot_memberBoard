@@ -100,4 +100,21 @@ public class BoardService {
             boardRepository.save(BoardEntity.toUpdateEntity(boardDTO,memberEntity));
         }
     }
+
+    public List<BoardDTO> search(String q, Long choice) {
+        // choice 1= 전체 , 2=제목 , 3=작성자
+        List<BoardEntity> boardEntities = new ArrayList<>();
+        if(choice==1){
+            boardEntities = boardRepository.findByBoardTitleContainingOrBoardWriterContaining(q, q);
+        }else if (choice==2){
+            boardEntities = boardRepository.findByBoardTitleContaining(q);
+        }else{
+            boardEntities = boardRepository.findByBoardWriterContaining(q);
+        }
+        List<BoardDTO> boardDTOList = new ArrayList<>();
+        for (BoardEntity boardEntity : boardEntities){
+            boardDTOList.add(BoardDTO.toDTO(boardEntity));
+        }
+        return boardDTOList;
+    }
 }

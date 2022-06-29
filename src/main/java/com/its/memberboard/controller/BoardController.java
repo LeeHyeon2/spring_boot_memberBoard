@@ -72,4 +72,13 @@ public class BoardController {
         return "redirect:/board";
     }
 
+    @GetMapping("/search")
+    public String search(@RequestParam("q") String q, @RequestParam("choice") Long choice , Model model){
+        System.out.println("q = " + q + ", choice = " + choice);
+        // choice 1= 전체 , 2=제목 , 3=작성자
+        List<BoardDTO>boardDTOList = boardService.search(q,choice);
+        model.addAttribute("boardDTOList",boardDTOList);
+        return "/boardPages/search";
+    }
+
 }

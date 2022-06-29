@@ -9,5 +9,15 @@
     <h2>board.main</h2>
     <a href="/board/save">글 쓰기</a>
     <a href="/board">글 목록 조회</a>
+
+    <form action="/board/search" method="get">
+        <select name="choice">
+            <option value="1">전체검색</option>
+            <option value="2">제목</option>
+            <option value="3">작성자</option>
+        </select>
+        <input type="search" name="q">
+        <input type="submit" value="검색">
+    </form>
 </body>
 </html>

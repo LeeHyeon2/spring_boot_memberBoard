@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<th:block th:replace="layout/header :: header"></th:block>
+    <h2>검색결과</h2>
+<table>
+    <tr>
+        <th>id</th>
+        <th>제목</th>
+        <th>작성자</th>
+        <th>작성시간</th>
+        <th>조회수</th>
+    </tr>
+    <tr th:each="boardDTO: ${boardDTOList}" th:onclick="|location.href='@{/board/{id}(id=${boardDTO.id})}'|">
+        <td th:text="${boardDTO.id}"></td>
+        <td>[[${boardDTO.boardTitle}]]</td>
+        <td th:text="${boardDTO.boardWriter}"></td>
+        <td th:text="*{#temporals.format(boardDTO.boardCreatedTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+        <td th:text="${boardDTO.boardHits}"></td>
+    </tr>
+</table>
+</body>
+</html>
