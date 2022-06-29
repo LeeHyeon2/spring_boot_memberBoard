@@ -26,6 +26,25 @@
     <td th:text="*{#temporals.format(boardDTO.boardCreatedTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
     <td><img th:src="@{|/upload/${boardDTO.boardFileName}|}" width="100" height="100" alt=""></td>
   </tr>
+
+  <tr th:if="${session.loginMemberEmail.toString().equals(boardDTO.boardWriter)}">
+    <td><button th:onclick="button(1)">수정</button> <button th:onclick="button(2)">삭제</button></td>
+  </tr>
+  <tr th:if="!${session.loginMemberEmail.toString().equals(boardDTO.boardWriter)}">
+    <div th:if="${session.loginMemberEmail.toString().equals('admin')}">
+      <td><button th:onclick="button(2)">삭제</button></td>
+    </div>
+  </tr>
 </table>
 </body>
+<script>
+  const button = (num) => {
+      if(num==1){
+        alert("수정")
+      }else{
+        alert("삭제되었습니다.");
+        location.href = "/board/delete/" + [[${boardDTO.id}]];
+      }
+  }
+</script>
 </html>
