@@ -40,6 +40,7 @@
 <script>
   const button = (num) => {
       if(num==1){
+        location.href = "/board/update/" + [[${boardDTO.id}]];
         alert("수정")
       }else{
         alert("삭제되었습니다.");

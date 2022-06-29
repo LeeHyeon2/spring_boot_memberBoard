@@ -33,8 +33,10 @@ public class BoardService {
         String savePath = "C:\\spring_img\\" + boardFileName;
         if(!boardFile.isEmpty()){
             boardFile.transferTo(new File(savePath));
+            boardDTO.setBoardFileName(boardFileName);
+        }else{
+            boardDTO.setBoardFileName(null);
         }
-        boardDTO.setBoardFileName(boardFileName);
 
         // toEntity 메서드에 회원 엔티티를 같이 전달해야 함. (로그인 이메일이 작성자와 동일하다는 전제조건)
         Optional<MemberEntity> optionalMemberEntity =
@@ -76,5 +78,26 @@ public class BoardService {
 
     public void delete(Long id) {
         boardRepository.deleteById(id);
+    }
+
+    public void update(BoardDTO boardDTO) throws IOException {
+        MultipartFile boardFile = boardDTO.getBoardFile();
+        String boardFileName = boardFile.getOriginalFilename();
+        boardFileName = System.currentTimeMillis() + "_" + boardFileName;
+        String savePath = "C:\\spring_img\\" + boardFileName;
+        if(!boardFile.isEmpty()){
+            boardFile.transferTo(new File(savePath));
+            boardDTO.setBoardFileName(boardFileName);
+        }else{
+            boardDTO.setBoardFileName(null);
+        }
+
+        // toEntity 메서드에 회원 엔티티를 같이 전달해야 함. (로그인 이메일이 작성자와 동일하다는 전제조건)
+        Optional<MemberEntity> optionalMemberEntity =
+                memberRepository.findByMemberEmail(boardDTO.getBoardWriter());
+        if (optionalMemberEntity.isPresent()){
+            MemberEntity memberEntity = optionalMemberEntity.get();
+            boardRepository.save(BoardEntity.toUpdateEntity(boardDTO,memberEntity));
+        }
     }
 }
