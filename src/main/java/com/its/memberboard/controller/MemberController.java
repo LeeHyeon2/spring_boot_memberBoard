@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @Controller
@@ -26,5 +27,24 @@ public class MemberController {
     @PostMapping("/dup-check")
     public @ResponseBody String dupCheck(@RequestParam("memberEmail") String email){
         return memberService.dupCheck(email);
+    }
+
+    @GetMapping("/login")
+    public String loginForm(){
+        return "/memberPages/login";
+    }
+
+    @PutMapping("/login")
+    public @ResponseBody String loginCheck(@RequestParam("memberEmail") String memberEmail,
+                                           @RequestParam("memberPassword") String memberPassword,HttpSession session){
+        MemberDTO memberDTO = memberService.loginCheck(memberEmail, memberPassword);
+        if (memberDTO != null){
+            session.setAttribute("loginId",memberDTO.getId());
+            session.setAttribute("loginMemberEmail",memberDTO.getMemberEmail());
+            return "ok";
+        }else {
+            return "no";
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 package com.its.memberboard.dto;
 
+import com.its.memberboard.entity.MemberEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,4 +27,13 @@ public class MemberDTO {
         this.memberProfile = memberProfile;
     }
 
+    public static MemberDTO toDTO(MemberEntity memberEntity) {
+        MemberDTO memberDTO = new MemberDTO();
+        memberDTO.setId(memberEntity.getId());
+        memberDTO.setMemberEmail(memberEntity.getMemberEmail());
+        memberDTO.setMemberPassword(memberEntity.getMemberPassword());
+        memberDTO.setMemberName(memberEntity.getMemberName());
+        memberDTO.setMemberProfile(memberEntity.getMemberProfile());
+        return memberDTO;
+    }
 }

@@ -39,4 +39,19 @@ public class MemberService {
 
         memberRepository.save(MemberEntity.toSaveEntity(memberDTO));
     }
+
+    public MemberDTO loginCheck(String memberEmail, String memberPassword) {
+        Optional<MemberEntity> optionalMemberEntity = memberRepository.findByMemberEmail(memberEmail);
+        if (optionalMemberEntity.isPresent()){
+            MemberEntity loginEntity = optionalMemberEntity.get();
+            if (loginEntity.getMemberPassword().equals(memberPassword)){
+                return MemberDTO.toDTO(loginEntity);
+            }else {
+                return null;
+            }
+
+        }else {
+            return null;
+        }
+    }
 }
