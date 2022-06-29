@@ -23,6 +23,15 @@ public class BoardDTO {
     private MultipartFile boardFile; // 실제 파일
     private String boardFileName; // 파일 이름
 
+    public BoardDTO(Long id, String boardTitle, String boardWriter, int boardHits, LocalDateTime boardCreatedTime) {
+        this.id = id;
+        this.boardTitle = boardTitle;
+        this.boardWriter = boardWriter;
+        this.boardHits = boardHits;
+        this.boardCreatedTime = boardCreatedTime;
+    }
+
+
     public static BoardDTO toDTO(BoardEntity entity) {
         BoardDTO boardDTO = new BoardDTO();
         boardDTO.setId(entity.getId());

@@ -1,8 +1,12 @@
 package com.its.memberboard.controller;
 
+import com.its.memberboard.common.PagingConst;
 import com.its.memberboard.dto.BoardDTO;
 import com.its.memberboard.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -30,10 +34,14 @@ public class BoardController {
         return "/boardPages/main";
     }
 
-    @GetMapping("/list")
-    public String findAll(Model model){
-        List<BoardDTO> boardDTOList = boardService.findAll();
-        model.addAttribute("boardDTOList",boardDTOList);
+    @GetMapping
+    public String paging(@PageableDefault(page = 1) Pageable pageable, Model model) {
+        Page<BoardDTO> boardList = boardService.paging(pageable);
+        model.addAttribute("boardDTOList", boardList);
+        int startPage = (((int) (Math.ceil((double) pageable.getPageNumber() / PagingConst.BLOCK_LIMIT))) - 1) * PagingConst.BLOCK_LIMIT + 1;
+        int endPage = ((startPage + PagingConst.BLOCK_LIMIT - 1) < boardList.getTotalPages()) ? startPage + PagingConst.BLOCK_LIMIT - 1 : boardList.getTotalPages();
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
         return "/boardPages/list";
     }
 
