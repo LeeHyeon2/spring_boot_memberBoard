@@ -73,11 +73,17 @@ public class BoardController {
     }
 
     @GetMapping("/search")
-    public String search(@RequestParam("q") String q, @RequestParam("choice") Long choice , Model model){
-        System.out.println("q = " + q + ", choice = " + choice);
-        // choice 1= 전체 , 2=제목 , 3=작성자
-        List<BoardDTO>boardDTOList = boardService.search(q,choice);
-        model.addAttribute("boardDTOList",boardDTOList);
+    public String search(@RequestParam("q") String q, @RequestParam("choice") Long choice , Model model,
+                         @PageableDefault(page = 1) Pageable pageable){
+
+        Page<BoardDTO>boardList = boardService.search(q,choice,pageable);
+        model.addAttribute("boardDTOList",boardList);
+        int startPage = (((int) (Math.ceil((double) pageable.getPageNumber() / PagingConst.BLOCK_LIMIT))) - 1) * PagingConst.BLOCK_LIMIT + 1;
+        int endPage = ((startPage + PagingConst.BLOCK_LIMIT - 1) < boardList.getTotalPages()) ? startPage + PagingConst.BLOCK_LIMIT - 1 : boardList.getTotalPages();
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+        model.addAttribute("q",q);
+        model.addAttribute("choice",choice);
         return "/boardPages/search";
     }
 

@@ -17,7 +17,7 @@
         1. 회원가입 링크보임-->
     <div th:if="${session.loginMemberEmail}">
       <div th:if="${session.loginMemberEmail.toString().equals('admin')}">
-        <a href="#">관리자 모드</a>
+        <a href="/member/admin">관리자 모드</a>
       </div>
       <a href="/member/logout">로그아웃</a>
     </div>

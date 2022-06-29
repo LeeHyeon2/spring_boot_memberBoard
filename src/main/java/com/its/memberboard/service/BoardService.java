@@ -101,20 +101,30 @@ public class BoardService {
         }
     }
 
-    public List<BoardDTO> search(String q, Long choice) {
-        // choice 1= 전체 , 2=제목 , 3=작성자
-        List<BoardEntity> boardEntities = new ArrayList<>();
-        if(choice==1){
-            boardEntities = boardRepository.findByBoardTitleContainingOrBoardWriterContaining(q, q);
-        }else if (choice==2){
-            boardEntities = boardRepository.findByBoardTitleContaining(q);
-        }else{
-            boardEntities = boardRepository.findByBoardWriterContaining(q);
+    @Transactional
+    public Page<BoardDTO> search(String q, Long choice , Pageable pageable) {
+
+        int page = pageable.getPageNumber(); // 요청 페이지값 가져옴.
+        // 요청한 페이지가 1이면 페이지값을 0으로 하고 1이 아니면 요청 페이지에서 1을 뺀다.
+//        page = page - 1; // 삼항연산자
+        page = (page == 1)? 0: (page-1);
+        Pageable paging = PageRequest.of(page, PagingConst.PAGE_LIMIT, Sort.Direction.DESC, "id");
+        Page<BoardEntity> boardEntities;
+        if (choice == 1){
+            boardEntities = boardRepository.findByBoardTitleContainingOrBoardWriterContaining(q,q,paging);
+        }else if (choice == 2){
+            boardEntities = boardRepository.findByBoardTitleContaining(q,paging);
+        }else {
+            boardEntities = boardRepository.findByBoardWriterContaining(q,PageRequest.of(page, PagingConst.PAGE_LIMIT, Sort.by(Sort.Direction.DESC, "id")));
         }
-        List<BoardDTO> boardDTOList = new ArrayList<>();
-        for (BoardEntity boardEntity : boardEntities){
-            boardDTOList.add(BoardDTO.toDTO(boardEntity));
-        }
-        return boardDTOList;
+
+        Page<BoardDTO> boardList = boardEntities.map(
+                board -> new BoardDTO(board.getId(),
+                        board.getBoardTitle(),
+                        board.getBoardWriter(),
+                        board.getBoardHits(),
+                        board.getBoardCreatedTime()
+                ));
+        return boardList;
     }
 }

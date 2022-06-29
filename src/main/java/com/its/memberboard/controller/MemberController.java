@@ -4,10 +4,12 @@ import com.its.memberboard.dto.MemberDTO;
 import com.its.memberboard.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -53,10 +55,19 @@ public class MemberController {
         return "index";
     }
 
+    @GetMapping("/admin")
+    public String admin(Model model){
+        List<MemberDTO> memberDTOList = memberService.findAll();
+        model.addAttribute("memberDTOList",memberDTOList);
+        return "/memberPages/admin";
+    }
 
 
-
-
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable Long id){
+        memberService.delete(id);
+        return "redirect:/member/admin";
+    }
 
 
 
