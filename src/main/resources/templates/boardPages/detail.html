@@ -36,6 +36,38 @@
     </div>
   </tr>
 </table>
+<br>
+<br>
+<br>
+<table>
+  <form action="/comment/save" method="post" name="commentSave">
+    <tr>
+      <input type="hidden" th:value="${boardDTO.id}" name="boardId">
+      <th>작성자 : </th>
+      <th th:text="${session.loginMemberEmail}"></th>
+      <input type="hidden" th:value="${session.loginMemberEmail}" name="commentWriter">
+    </tr>
+    <tr>
+      <td><textarea name="commentContents" cols="10" rows="10"></textarea></td>
+      <td><input type="submit" value="댓글등록"></td>
+    </tr>
+  </form>
+</table>
+
+<table>
+  <div th:each="comment : ${commentDTOList}">
+    <tr>
+      <th>작성자 :</th>
+      <th th:text="${comment.commentWriter}"></th>
+      <th>작성시간 :</th>
+      <td th:text="*{#temporals.format(comment.createdTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+    </tr>
+    <tr>
+      <th>내용</th>
+      <th colspan="3" th:text="${comment.commentContents}"></th>
+    </tr>
+  </div>
+</table>
 </body>
 <script>
   const button = (num) => {

@@ -2,7 +2,9 @@ package com.its.memberboard.controller;
 
 import com.its.memberboard.common.PagingConst;
 import com.its.memberboard.dto.BoardDTO;
+import com.its.memberboard.dto.CommentDTO;
 import com.its.memberboard.service.BoardService;
+import com.its.memberboard.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +21,7 @@ import java.util.List;
 @RequestMapping("/board")
 public class BoardController {
     private final BoardService boardService;
+    private final CommentService commentService;
     @GetMapping("/")
     public String main(){
         return "/boardPages/main";
@@ -50,6 +53,8 @@ public class BoardController {
         BoardDTO boardDTO = boardService.findById(id);
         boardService.hits(id);
         model.addAttribute("boardDTO",boardDTO);
+        List<CommentDTO> commentDTOList = commentService.findByBoardId(id);
+        model.addAttribute("commentDTOList",commentDTOList);
         return "/boardPages/detail";
     }
 

@@ -1,5 +1,7 @@
 package com.its.memberboard.dto;
 
+import com.its.memberboard.entity.BoardEntity;
+import com.its.memberboard.entity.CommentEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,5 +17,15 @@ public class CommentDTO {
     private String commentWriter;
     private String commentContents;
     private LocalDateTime createdTime;
-    private LocalDateTime updatedTime;
+
+
+    public static CommentDTO toDTO(CommentEntity entity){
+        CommentDTO commentDTO = new CommentDTO();
+        commentDTO.setId(entity.getId());
+        commentDTO.setBoardId(entity.getBoardEntity().getId());
+        commentDTO.setCommentWriter(entity.getCommentWriter());
+        commentDTO.setCommentContents(entity.getCommentContents());
+        commentDTO.setCreatedTime(entity.getCommentCreatedTime());
+        return commentDTO;
+    }
 }
