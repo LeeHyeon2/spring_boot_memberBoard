@@ -8,7 +8,7 @@
 <th:block th:replace="layout/header :: header"></th:block>
     <h2>board.save</h2>
     <form action="/board/save" method="post" enctype="multipart/form-data">
-        <input type="text" name="boardWriter" th:value="${session.loginMemberEmail}"><br>
+        <input type="text" name="boardWriter" th:value="${session.loginMemberEmail}" readonly><br>
         <input type="text" name="boardTitle"><br>
         <textarea name="boardContents"></textarea><br>
         <input type="file" name="boardFile"><br>

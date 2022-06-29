@@ -7,10 +7,13 @@ import com.its.memberboard.repository.BoardRepository;
 import com.its.memberboard.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -35,5 +38,25 @@ public class BoardService {
             MemberEntity memberEntity = optionalMemberEntity.get();
             boardRepository.save(BoardEntity.toEntity(boardDTO,memberEntity));
         }
+    }
+
+    public List<BoardDTO> findAll() {
+        List<BoardEntity> boardEntities = boardRepository.findAll();
+        List<BoardDTO> boardDTOList = new ArrayList<>();
+
+        for (BoardEntity boardEntity : boardEntities){
+            boardDTOList.add(BoardDTO.toDTO(boardEntity));
+        }
+        return boardDTOList;
+    }
+
+    public BoardDTO findById(Long id) {
+        Optional<BoardEntity> boardEntity = boardRepository.findById(id);
+        return BoardDTO.toDTO(boardEntity.get());
+    }
+
+    @Transactional
+    public void hits(Long id) {
+        boardRepository.hits(id);
     }
 }

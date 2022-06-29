@@ -5,10 +5,7 @@ import com.its.memberboard.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -18,6 +15,10 @@ import java.util.List;
 @RequestMapping("/board")
 public class BoardController {
     private final BoardService boardService;
+    @GetMapping("/")
+    public String main(){
+        return "/boardPages/main";
+    }
     @GetMapping("/save")
     public String saveForm(){
         return "/boardPages/save";
@@ -29,5 +30,18 @@ public class BoardController {
         return "/boardPages/main";
     }
 
+    @GetMapping("/list")
+    public String findAll(Model model){
+        List<BoardDTO> boardDTOList = boardService.findAll();
+        model.addAttribute("boardDTOList",boardDTOList);
+        return "/boardPages/list";
+    }
 
+    @GetMapping("/{id}")
+    public String findById(@PathVariable Long id,Model model){
+        BoardDTO boardDTO = boardService.findById(id);
+        boardService.hits(id);
+        model.addAttribute("boardDTO",boardDTO);
+        return "/boardPages/detail";
+    }
 }
