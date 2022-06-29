@@ -1,5 +1,6 @@
 package com.its.memberboard.entity;
 
+import com.its.memberboard.dto.BoardDTO;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
@@ -41,4 +42,16 @@ public class BoardEntity{
     // 게시글-댓글 연관관계(1:N)
     @OneToMany(mappedBy = "boardEntity" , cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
     private List<CommentEntity> commentEntityList = new ArrayList<>();
+
+    public static BoardEntity toEntity(BoardDTO boardDTO, MemberEntity memberEntity){
+        BoardEntity boardEntity = new BoardEntity();
+        boardEntity.setBoardTitle(boardDTO.getBoardTitle());
+        boardEntity.setBoardWriter(boardDTO.getBoardWriter());
+        boardEntity.setBoardContents(boardDTO.getBoardContents());
+        boardEntity.setBoardFileName(boardDTO.getBoardFileName());
+        boardEntity.setMemberEntity(memberEntity);
+        return boardEntity;
+    }
+
+
 }

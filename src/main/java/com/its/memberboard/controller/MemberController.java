@@ -34,8 +34,8 @@ public class MemberController {
         return "/memberPages/login";
     }
 
-    @PutMapping("/login")
-    public @ResponseBody String loginCheck(@RequestParam("memberEmail") String memberEmail,
+    @PostMapping("/login")
+    public @ResponseBody String login(@RequestParam("memberEmail") String memberEmail,
                                            @RequestParam("memberPassword") String memberPassword,HttpSession session){
         MemberDTO memberDTO = memberService.loginCheck(memberEmail, memberPassword);
         if (memberDTO != null){
@@ -45,6 +45,30 @@ public class MemberController {
         }else {
             return "no";
         }
-
     }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session){
+        session.invalidate();
+        return "index";
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

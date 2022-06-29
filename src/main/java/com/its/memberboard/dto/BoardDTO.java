@@ -14,7 +14,6 @@ public class BoardDTO {
     private Long id;
     private String boardTitle;
     private String boardWriter;
-    private String boardPassword;
     private String boardContents;
     private int boardHits;
     private LocalDateTime createdTime;

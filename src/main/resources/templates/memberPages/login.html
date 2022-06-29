@@ -6,6 +6,7 @@
     <title>login</title>
 </head>
 <body>
+<th:block th:replace="layout/header :: header"></th:block>
     <h2>login</h2>
     이메일 : <input type="text" name="memberEmail" id="memberEmail"> <br>
     비밀번호 : <input type="text" name="memberPassword" id="memberPassword"> <br>
@@ -17,7 +18,7 @@
       let password = document.getElementById("memberPassword").value;
       $.ajax({
         url:"/member/login",
-        type:"put",
+        type:"post",
         data:{
             "memberEmail":email,
             "memberPassword":password
@@ -26,7 +27,7 @@
         success:function (result){
             if (result == "ok"){
                 alert("환영합니다!!");
-                location.href = "/";
+                location.href = "/board/";
             }else{
                 alert("아이디 혹은 비밀번호가 일치하지 않습니다!!");
             }
