@@ -69,17 +69,16 @@ public class MemberController {
         return "redirect:/member/admin";
     }
 
+    @GetMapping("/myPage")
+    public String myPage(Model model , HttpSession session){
+        MemberDTO memberDTO = memberService.findById(session.getAttribute("loginId"));
+        model.addAttribute("memberDTO",memberDTO);
+        return "/memberPages/myPage";
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
+    @PostMapping("/update")
+    public String update(@ModelAttribute MemberDTO memberDTO) throws IOException {
+        memberService.update(memberDTO);
+        return "/index";
+    }
 }

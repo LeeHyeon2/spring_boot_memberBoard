@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <title>myPage</title>
+</head>
+<body>
+    <h2>myPage</h2>
+    <table>
+        <tr>
+            <form action="/member/update" method="post" enctype="multipart/form-data" name="updateForm">
+                <input type="hidden" name="id" th:value="${memberDTO.id}">
+                <td><input type="text" name="memberEmail" th:value="${memberDTO.memberEmail}" readonly></td>
+                <td><input type="text" name="memberPassword" id="memberPassword" placeholder="비밀번호를 입력해주세요"></td>
+                <td><input type="text" name="memberName" th:value="${memberDTO.memberName}"></td>
+                <td><input type="text" name="memberProfile" th:value="${memberDTO.memberProfile}"></td>
+                <td><input type="file" name="memberFile"></td>
+            </form>
+            <td><button th:onclick="update()">수정</button></td>
+        </tr>
+    </table>
+</body>
+<script>
+    function update() {
+        let pw = [[${memberDTO.memberPassword}]];
+        let pwCheck = document.getElementById("memberPassword").value;
+        if (pw == pwCheck){
+            alert("수정되었습니다.")
+            updateForm.submit();
+        }else{
+            alert("비밀번호가 일치하지 않습니다!!");
+        }
+    }
+</script>
+</html>

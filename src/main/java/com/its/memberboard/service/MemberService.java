@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,8 +36,6 @@ public class MemberService {
             memberFile.transferTo(new File(savePath));
         }
         memberDTO.setMemberProfile(memberFileName);
-
-        // toEntity 메서드에 회원 엔티티를 같이 전달해야 함. (로그인 이메일이 작성자와 동일하다는 전제조건)
 
 
         memberRepository.save(MemberEntity.toSaveEntity(memberDTO));
@@ -68,5 +67,25 @@ public class MemberService {
 
     public void delete(Long id) {
         memberRepository.deleteById(id);
+    }
+
+    public MemberDTO findById(Object loginId) {
+        Long id = (Long) loginId;
+        Optional<MemberEntity> memberEntity = memberRepository.findById(id);
+        return MemberDTO.toDTO(memberEntity.get());
+    }
+
+    public void update(MemberDTO memberDTO) throws IOException {
+        MultipartFile memberFile = memberDTO.getMemberFile();
+        String memberFileName = memberFile.getOriginalFilename();
+        memberFileName = System.currentTimeMillis() + "_" + memberFileName;
+        String savePath = "C:\\spring_img\\" + memberFileName;
+        if(!memberFile.isEmpty()){
+            memberFile.transferTo(new File(savePath));
+            memberDTO.setMemberProfile(memberFileName);
+        }else {
+        }
+
+        memberRepository.save(MemberEntity.toUpdateEntity(memberDTO));
     }
 }
